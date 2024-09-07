@@ -1,5 +1,7 @@
 package org.sunbird.url.util;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.apache.commons.lang3.StringUtils;
 import org.sunbird.common.Slug;
 import org.sunbird.common.exception.ClientException;
@@ -30,7 +32,7 @@ public class HTTPUrlUtil {
 		URLConnection conn = null;
 		Map<String, Object> metadata = new HashMap<>();
 		try {
-			URL url = new URL(fileUrl);
+			URL url = Urls.create(fileUrl, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
 			conn = url.openConnection();
 			if (conn instanceof HttpURLConnection) {
 				((HttpURLConnection) conn).setRequestMethod("HEAD");
@@ -69,7 +71,7 @@ public class HTTPUrlUtil {
 		FileOutputStream outputStream = null;
 		File file = null;
 		try {
-			URL url = new URL(fileURL);
+			URL url = Urls.create(fileURL, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS);
 			httpConn = (HttpURLConnection) url.openConnection();
 			int responseCode = httpConn.getResponseCode();
 			TelemetryManager.log("Response Code: " + responseCode);
