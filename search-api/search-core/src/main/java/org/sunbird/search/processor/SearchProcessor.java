@@ -317,7 +317,7 @@ public class SearchProcessor {
 
 
 			String propertyName = (String) property.get("propertyName");
-			if (propertyName.equals("*")) {
+			if ("*".equals(propertyName)) {
 				relevanceSort = true;
 				propertyName = "all_fields";
 				queryBuilder = getAllFieldsPropertyQuery(values);
@@ -408,7 +408,7 @@ public class SearchProcessor {
 				break;
 			}
 			}
-			if (totalOperation.equalsIgnoreCase(AND)) {
+			if (AND.equalsIgnoreCase(totalOperation)) {
 				boolQuery.must(queryBuilder);
 			} else {
 				boolQuery.should(queryBuilder);
@@ -459,7 +459,7 @@ public class SearchProcessor {
 
 			values = values.stream().filter(value -> (null != value)).collect(Collectors.toList());
 			String propertyName = (String) property.get("propertyName");
-			if (propertyName.equals("*")) {
+			if ("*".equals(propertyName)) {
 				relevanceSort = true;
 				propertyName = "all_fields";
 				filterFunctionBuilder

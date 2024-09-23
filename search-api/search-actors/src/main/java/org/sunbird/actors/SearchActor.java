@@ -578,7 +578,7 @@ public class SearchActor extends SearchBaseActor {
     private Map<String, Object> getCompositeSearchResponse(Map<String, Object> searchResponse) {
         Map<String, Object> respResult = new HashMap<String, Object>();
         for (Map.Entry<String, Object> entry : searchResponse.entrySet()) {
-            if (entry.getKey().equalsIgnoreCase("results")) {
+            if ("results".equalsIgnoreCase(entry.getKey())) {
                 List<Object> lstResult = (List<Object>) entry.getValue();
                 if (null != lstResult && !lstResult.isEmpty()) {
                     Map<String, List<Map<String, Object>>> result = new HashMap<String, List<Map<String, Object>>>();
