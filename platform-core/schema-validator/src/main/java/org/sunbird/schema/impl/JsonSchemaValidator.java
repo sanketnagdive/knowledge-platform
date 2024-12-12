@@ -2,6 +2,8 @@ package org.sunbird.schema.impl;
 
 import com.typesafe.config.Config;
 import com.typesafe.config.ConfigFactory;
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.apache.commons.lang3.StringUtils;
 import org.leadpony.justify.api.JsonSchema;
 import org.sunbird.common.Platform;
@@ -34,7 +36,7 @@ public class JsonSchemaValidator extends BaseSchemaValidator {
     private void loadSchema() throws Exception {
         System.out.println("Schema path: " + basePath + "schema.json");
         if(basePath.startsWith("http")){
-            InputStream stream = new URL( basePath + "schema.json").openStream();
+            InputStream stream = Urls.create(basePath + "schema.json", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS).openStream();
             this.schema = readSchema(stream);
         }else {
             Path schemaPath = new File( basePath + "schema.json").toPath();
@@ -45,7 +47,7 @@ public class JsonSchemaValidator extends BaseSchemaValidator {
     private void loadConfig() throws Exception {
         System.out.println("Config path: " + basePath + "config.json");
         if(basePath.startsWith("http")){
-            this.config = ConfigFactory.parseURL(new URL( basePath + "config.json"));
+            this.config = ConfigFactory.parseURL(Urls.create(basePath + "config.json", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
         } else {
             File configFile = new File(basePath + "config.json");
             this.config = ConfigFactory.parseFile(configFile);
@@ -56,9 +58,9 @@ public class JsonSchemaValidator extends BaseSchemaValidator {
         if(StringUtils.isEmpty(fallbackPath))
             loadConfig();
         else {
-            Config fallbackConfig = ConfigFactory.parseURL(new URL(basePath + fallbackPath.toLowerCase() + "/" + version + "/" +  "config.json"));
+            Config fallbackConfig = ConfigFactory.parseURL(Urls.create(basePath + fallbackPath.toLowerCase() + "/" + version + "/" +  "config.json", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS));
             basePath = basePath + name.toLowerCase() + "/" + version + "/";
-            this.config = ConfigFactory.parseURL(new URL( basePath + "config.json")).withFallback(fallbackConfig);
+            this.config = ConfigFactory.parseURL(Urls.create(basePath + "config.json", Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS)).withFallback(fallbackConfig);
         }
     }
 
