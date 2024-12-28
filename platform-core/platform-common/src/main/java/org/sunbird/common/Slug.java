@@ -116,7 +116,7 @@ public class Slug {
     public static String normalizeDashes(String text) {
         String clean = DUPDASH.matcher(text).replaceAll("-");
         // Special case that only dashes remain
-        if (clean.equals("-") || clean.equals("--"))
+        if ("-".equals(clean) || "--".equals(clean))
             return "";
         int startIdx = (clean.startsWith("-") ? 1 : 0);
         int endIdx = (clean.endsWith("-") ? 1 : 0);
