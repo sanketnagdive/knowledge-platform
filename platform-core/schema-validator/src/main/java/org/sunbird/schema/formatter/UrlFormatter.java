@@ -1,5 +1,7 @@
 package org.sunbird.schema.formatter;
 
+import io.github.pixee.security.HostValidator;
+import io.github.pixee.security.Urls;
 import org.leadpony.justify.api.InstanceType;
 import org.leadpony.justify.spi.FormatAttribute;
 
@@ -24,7 +26,7 @@ public class UrlFormatter implements FormatAttribute {
         String str = ((JsonString) value).getString();
         try {
             //TODO: Change it to Head Call.
-            new URL(str).toURI();
+            Urls.create(str, Urls.HTTP_PROTOCOLS, HostValidator.DENY_COMMON_INFRASTRUCTURE_TARGETS).toURI();
             return true;
         } catch (Exception e) {
             return false;
